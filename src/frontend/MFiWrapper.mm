@@ -38,6 +38,10 @@
         BUTTON(LeftShoulder), BUTTON(RightShoulder),
         DPAD(LeftThumbstick), DPAD(RightThumbstick),
         BUTTON(LeftTrigger), BUTTON(RightTrigger),
+        
+        // MFiWrapper extensions
+        BUTTON(Select), BUTTON(Start), BUTTON(LeftStickButton),
+        BUTTON(RightStickButton),
         nil
     ];
     
@@ -103,8 +107,7 @@
 
 - (void)dealloc
 {
-    [_valueChangedHandler release];
-    [_dpad release];    
+    [_valueChangedHandler release];    
     [super dealloc];
 }
 
@@ -138,17 +141,19 @@
     tweak.rightShoulder = controller.tweakElements[MFi_RightShoulder];
     tweak.leftTrigger = controller.tweakElements[MFi_LeftTrigger];
     tweak.rightTrigger = controller.tweakElements[MFi_RightTrigger];
-    
+   
+    // MFiWrapper extensions
+    tweak.select = controller.tweakElements[MFi_Select];
+    tweak.start = controller.tweakElements[MFi_Start];
+    tweak.leftStickButton = controller.tweakElements[MFi_LeftStickButton];
+    tweak.rightStickButton = controller.tweakElements[MFi_RightStickButton];
+   
     return [tweak autorelease];
 }
 
 - (void)dealloc
 {
-    [_valueChangedHandler release];
-    [_dpad release];
-    [_leftThumbstick release];
-    [_rightThumbstick release];
-    
+    [_valueChangedHandler release];    
     [super dealloc];
 }
 
@@ -202,7 +207,7 @@
         self.value = value;
         
         // NOTE: Docs say this should be .25f
-        self.pressed = value >= 0.0f;
+        self.pressed = value > 0.0001f;
 
         if (self.valueChangedHandler)
             self.valueChangedHandler(self, self.value, self.pressed);
